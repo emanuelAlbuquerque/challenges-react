@@ -8,21 +8,14 @@ Fazendo desafio usando React, aonde o usuário clicar aparecerá um ponto branco
 
 ## 🧑‍💻 Requisitos
 
-<ul>
-  <ol>O Usuário pode clicar em qualquer lugar de uma página</ol>
-  <ol>Deve-se rederizar um pequeno click na posição clicada</ol>
-  <ol>A cada clique mantem-se o click já clicado e renderiza um novo</ol>
-  <ol>Crie duas funcionalidades para a aplicação: 
-    <ol>Desfazer</ol>
-    <ol>Refazer</ol>
-  </ol>
-</ul>
+  1. O Usuário pode clicar em qualquer lugar de uma página
+  2. Deve-se rederizar um pequeno click na posição clicada
+  3. A cada clique mantem-se o click já clicado e renderiza um novo
+  4. Crie duas funcionalidades para a aplicação: <b>Desfazer(undo)</> & <b>Refazer(redo)</b>
 
 ### Exibição
 
-<p align="center" style="display: flex; align-items: flex-start; justify-content: center; flex-direction: column;">
-  <video src="https://github.com/emanuelAlbuquerque/challenges-react/blob/main/locate-click/src/assets/video/VideoDemonstracao.mp4">
-</p>
+![VideoDemonstracao](https://user-images.githubusercontent.com/102307567/229398726-9b683549-844d-4f78-be1d-e594649f506d.gif)
 
 ## 🛠 Tecnologias
 

@@ -1,7 +1,6 @@
-import fastify from "fastify";
 import { app } from "./app/app";
+import { routerProducts } from "./routes/ProductsRouter";
 require('dotenv').config()
-
 
 const start = async () => {
   try {
@@ -11,11 +10,22 @@ const start = async () => {
     })
     console.log('Server is Running')
   } catch (err) {
-    app.log.error(err)
+    console.log(err)
   }
 }
 
-app.get('/products', async (request, replay) => replay.send("hello word"))
+// app.post('/cadastrarProdutos', async (request, replay) => {
+//   // const { nome, preco } = request.body as bodyRequest
 
+//   // productsCart.push({
+//   //   name: nome,
+//   //   price: preco
+//   // })
+
+//   return replay.status(201).send(request.body)
+// })
+
+
+routerProducts()
 start()
 

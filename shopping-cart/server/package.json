@@ -10,6 +10,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^18.15.11",
+    "@types/uuid": "^9.0.1",
     "tsup": "^6.7.0",
     "tsx": "^3.12.6",
     "typescript": "^5.0.3"
@@ -17,6 +18,7 @@
   "dependencies": {
     "dotenv": "^16.0.3",
     "fastify": "^4.15.0",
+    "uuid": "^9.0.0",
     "zod": "^3.21.4"
   }
 }

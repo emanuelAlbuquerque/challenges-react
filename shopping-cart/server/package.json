@@ -16,9 +16,10 @@
     "typescript": "^5.0.3"
   },
   "dependencies": {
+    "@types/mongoose": "^5.11.97",
     "dotenv": "^16.0.3",
     "fastify": "^4.15.0",
-    "uuid": "^9.0.0",
-    "zod": "^3.21.4"
+    "mongoose": "^7.0.3",
+    "uuid": "^9.0.0"
   }
 }

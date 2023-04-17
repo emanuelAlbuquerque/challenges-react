@@ -15,6 +15,7 @@
     "typescript": "^5.0.3"
   },
   "dependencies": {
+    "@fastify/cors": "^8.2.1",
     "@types/mongoose": "^5.11.97",
     "dotenv": "^16.0.3",
     "fastify": "^4.15.0",

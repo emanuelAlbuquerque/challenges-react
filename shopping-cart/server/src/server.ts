@@ -1,6 +1,13 @@
 import { app } from "./app/app";
+import { connectionDB } from "./database/config";
 import { routerProducts } from "./routes/ProductsRouter";
-require('dotenv').config()
+import cors from '@fastify/cors'
+import doteenv from 'dotenv'
+
+doteenv.config()
+app.register(cors, {
+  origin: '*'
+})
 
 const start = async () => {
   try {
@@ -14,18 +21,7 @@ const start = async () => {
   }
 }
 
-// app.post('/cadastrarProdutos', async (request, replay) => {
-//   // const { nome, preco } = request.body as bodyRequest
-
-//   // productsCart.push({
-//   //   name: nome,
-//   //   price: preco
-//   // })
-
-//   return replay.status(201).send(request.body)
-// })
-
-
+connectionDB()
 routerProducts()
 start()
 

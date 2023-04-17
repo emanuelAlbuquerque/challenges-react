@@ -1,64 +1,86 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { productsCart, productsSchema } from "../ProductsCart";
-import { z } from 'zod'
+import { IProductsSchema, products } from "../models/Products.schema";
+import { Error, MongooseError } from "mongoose";
 
 interface findProductByIdParamns {
   id: string
 }
 
 export class CarrinhoController {
-  async listProducts(request: FastifyRequest, replay: FastifyReply) {
 
-    const products = [...productsCart]
+  async listProducts(request: FastifyRequest, reply: FastifyReply) {
+    const productsList = await products.find().exec()
 
-    if (products.length === 0) {
-      return replay.send('Nenhum produto disponiveis')
+    if (!productsList) {
+      return reply.status(400).send({ menssage: "No product available" })
     }
 
-    return replay.status(200).send(products)
+    return reply.status(200).send(productsList)
   }
 
-  async findProductById(request: FastifyRequest, replay: FastifyReply) {
+  async findProductById(request: FastifyRequest, reply: FastifyReply) {
     const { id } = request.params as findProductByIdParamns
 
-    const findProduct = productsCart.find((produto) => produto.id === id)
-
-    if (!findProduct) {
-      return replay.status(400).send({ mensage: 'Product not find' })
-    }
-
-    return replay.status(200).send(findProduct)
-  }
-
-
-  async cadastrarProduto(request: FastifyRequest, reply: FastifyReply) {
     try {
-      const products = productsSchema.parse(request.body)
-      productsCart.push(products)
-    } catch (error) {
-      const errorJson = JSON.stringify(error)
-      if (error instanceof z.ZodError) {
-        return reply.status(400).send(errorJson)
-      }
-    }
+      const findProduct = await products.findById(id).exec()
 
-    return reply.status(201).send(productsCart)
+      if (!findProduct) {
+        return reply.status(400).send({ mensage: 'Product not find' })
+      }
+
+      return reply.status(200).send(findProduct)
+    } catch (error) {
+      const err = error as MongooseError
+      return reply.status(500).send({ menssage: err.message })
+    }
   }
 
-  // async deleteProductById(request: FastifyRequest, replay: FastifyReply) {
-  //   const { id } = request.params as findProductByIdParamns
+  async createProduct(request: FastifyRequest, reply: FastifyReply) {
+    try {
+      const productsCreate = await products.create(request.body)
 
-  //   const products = productsCart.filter((produto) => produto.id !== id)
+      return reply.status(201).send(productsCreate)
 
-  //   if (!products) {
-  //     return replay.status(400).send({ mensage: 'Product not find' })
-  //   }
+    } catch (error) {
+      const err = error as MongooseError
+      return reply.status(500).send({ menssage: err.message })
+    }
+  }
 
+  async deleteProductById(request: FastifyRequest, reply: FastifyReply) {
+    const { id } = request.params as findProductByIdParamns
 
+    try {
+      const deleteProduct = await products.findByIdAndDelete(id).exec()
 
-  //   return replay.status(200).send(findProduct)
-  // }
+      if (!deleteProduct) {
+        return reply.status(400).send({ mensage: 'Product not find' })
+      }
 
+      return reply.status(200).send({ mensage: "Product deleted successfully." })
+    } catch (error) {
+      const err = error as MongooseError
+      return reply.status(500).send({ menssage: err.message })
+    }
+  }
 
+  async updateProductById(request: FastifyRequest, reply: FastifyReply) {
+    try {
+      const { id } = request.params as findProductByIdParamns
+      const body = request.body as IProductsSchema
+
+      const updateProduct = await products.findByIdAndUpdate(id, { $set: body })
+
+      if (!updateProduct) {
+        throw new Error('Product not find')
+      }
+
+      return reply.status(200).send({ mensage: "Product update successfully." })
+
+    } catch (error) {
+      const err = error as MongooseError
+      return reply.status(500).send(err)
+    }
+  }
 
 }

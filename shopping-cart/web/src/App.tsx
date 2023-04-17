@@ -1,17 +1,30 @@
 import Summary from './Components/Summary/Summary'
 import RowProducts from './Components/RowProducts/TableRow'
+import logo from './assets/react.svg'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import './style.scss'
+import axiosIntance from './services/Api'
 
 function App() {
   const [count, setCount] = useState(0)
+  const [prodcts, setProducts] = useState([])
+
+  const listProducts = async () => {
+    const prod = await axiosIntance.get('/')
+
+    setProducts(prod.data)
+  }
+
+  useEffect(() => {
+    listProducts()
+  }, [])
 
   return (
     <>
       <header className="header">
-        <h1>Carrinho de compras</h1>
+        <h1>Cart Shooping</h1>
       </header>
 
       <main>
@@ -20,21 +33,22 @@ function App() {
             <table>
               <thead>
                 <tr>
-                  <th>Produto</th>
-                  <th>Preço</th>
-                  <th>Quantidade</th>
+                  <th>Product</th>
+                  <th>Price</th>
+                  <th>Quantify</th>
                   <th>Total</th>
                   <th>-</th>
                 </tr>
               </thead>
               <tbody>
-                <RowProducts />
-                <RowProducts />
-                <RowProducts />
-                <RowProducts />
-                <RowProducts />
-                <RowProducts />
-                <RowProducts />
+                <RowProducts
+                  category="Informatica"
+                  id="1dvb"
+                  image={logo}
+                  name="Monitor"
+                  quantify={10}
+                  price={2000}
+                />
               </tbody>
             </table>
           </section>

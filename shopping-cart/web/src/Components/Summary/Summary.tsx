@@ -1,4 +1,13 @@
-const Summary = () => {
+import { useShoopingCartContext } from '../../Hooks/useShoopingCartContext'
+import { formatCurrencyNumber } from '../../Utils/FormatNumber'
+
+interface ISummary {
+  freight?: number
+}
+
+const Summary = ({ freight = 0 }: ISummary) => {
+  const { amount } = useShoopingCartContext()
+
   return (
     <>
       <div className="box">
@@ -6,11 +15,11 @@ const Summary = () => {
         <div className="info">
           <div>
             <span>Sub-total</span>
-            <span>R$ 418</span>
+            <span>{formatCurrencyNumber(amount)}</span>
           </div>
           <div>
             <span>Frete</span>
-            <span>Gratuito</span>
+            <span>{freight ? formatCurrencyNumber(freight) : 'Gratuito'}</span>
           </div>
           <div>
             <button>
@@ -21,7 +30,7 @@ const Summary = () => {
         </div>
         <footer>
           <span>Total</span>
-          <span>R$ 418</span>
+          <span>{formatCurrencyNumber(amount - freight)}</span>
         </footer>
       </div>
       <button>Finalizar Compra</button>

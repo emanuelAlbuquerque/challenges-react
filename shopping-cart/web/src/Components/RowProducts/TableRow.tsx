@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
+import { formatCurrencyNumber } from '../../Utils/FormatNumber'
+import axiosIntance from '../../services/Api'
+import { useShoopingCartContext } from '../../Hooks/useShoopingCartContext'
 
 interface IRowProducts {
-  id: string
+  _id: string
   name: string
   category: string
   image: string
@@ -11,34 +14,41 @@ interface IRowProducts {
 
 const RowProducts = ({
   category,
-  id,
+  _id,
   image,
   name,
   price,
   quantify
 }: IRowProducts) => {
   const [quantifyModify, setQuantifyModify] = useState<number>(quantify)
+  const { setAmount, listProducts } = useShoopingCartContext()
 
-  const formatCurrencyNumber = (number: number) => {
-    return number.toLocaleString('pt-BR', {
-      style: 'currency',
-      currency: 'BRL'
-    })
-  }
+  const handleClickQuantify = async (option: 'increment' | 'decrement') => {
+    let qtd = quantifyModify
 
-  const handleClickQuantify = (option: 'increment' | 'decrement') => {
     if (option === 'increment') {
-      setQuantifyModify(prev => prev + 1)
+      qtd += 1
     }
 
     if (option === 'decrement') {
-      setQuantifyModify(prev => {
-        if (prev === 1) {
-          return prev
-        }
-        return prev - 1
-      })
+      if (qtd === 1) {
+        return
+      }
+      qtd -= 1
     }
+
+    await axiosIntance.put(`/product/${_id}`, {
+      quantify: qtd
+    })
+
+    setQuantifyModify(qtd)
+    listProducts()
+  }
+
+  const deleteProduct = async () => {
+    await axiosIntance.delete(`/product/${_id}`)
+    setAmount(0)
+    listProducts()
   }
 
   return (
@@ -66,7 +76,7 @@ const RowProducts = ({
       </td>
       <td>{formatCurrencyNumber(price * quantifyModify)}</td>
       <td>
-        <button className="remove">
+        <button className="remove" onClick={deleteProduct}>
           <i className="bx bx-x"></i>
         </button>
       </td>

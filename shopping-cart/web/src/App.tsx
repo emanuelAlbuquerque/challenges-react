@@ -1,25 +1,27 @@
 import Summary from './Components/Summary/Summary'
 import RowProducts from './Components/RowProducts/TableRow'
-import logo from './assets/react.svg'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { useShoopingCartContext } from './Hooks/useShoopingCartContext'
 
 import './style.scss'
-import axiosIntance from './services/Api'
 
 function App() {
-  const [count, setCount] = useState(0)
-  const [prodcts, setProducts] = useState([])
+  const { products, listProducts, setAmount } = useShoopingCartContext()
 
-  const listProducts = async () => {
-    const prod = await axiosIntance.get('/')
-
-    setProducts(prod.data)
+  const handleAmount = () => {
+    products.forEach(product => {
+      setAmount(prev => prev + product.price * product.quantify)
+    })
   }
 
   useEffect(() => {
     listProducts()
   }, [])
+
+  useEffect(() => {
+    handleAmount()
+  }, [products])
 
   return (
     <>
@@ -41,14 +43,17 @@ function App() {
                 </tr>
               </thead>
               <tbody>
-                <RowProducts
-                  category="Informatica"
-                  id="1dvb"
-                  image={logo}
-                  name="Monitor"
-                  quantify={10}
-                  price={2000}
-                />
+                {products.map(product => (
+                  <RowProducts
+                    key={product._id}
+                    _id={product._id}
+                    category={product.category}
+                    image={product.img}
+                    name={product.name}
+                    quantify={product.quantify}
+                    price={product.price}
+                  />
+                ))}
               </tbody>
             </table>
           </section>
